@@ -1,4 +1,4 @@
----
+--- 
  - name: Get Junos OS configuration via SSH
    hosts: juniper
    connection: local
@@ -18,7 +18,7 @@
          path: "{{ cfg_dir }}"
          state: directory
 
-     - name: "Get selected configuration hierarchies and save to file"
+     - name: Get selected configuration hierarchies and save to file 
        juniper.device.config:
          retrieve: "committed"
-         destdir: "{{ conf_file }}”
+         destdir: "{{ conf_file }}" 
