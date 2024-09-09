@@ -7,5 +7,6 @@ a respository of ansible playbooks for various vendor specific products
 ## Free Radius
 
 ## Juniper
+[Juniper Playbooks](https://linktodocumentation)
 
 ## Ruckus
