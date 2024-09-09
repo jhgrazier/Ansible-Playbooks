@@ -7,6 +7,6 @@ a respository of ansible playbooks for various vendor specific products
 ## Free Radius
 
 ## Juniper
-[Juniper Playbooks](https://linktodocumentation)
+[Juniper Playbooks](https://https://github.com/jhgrazier/ansible-playbooks/tree/main/juniper/README.md)
 
 ## Ruckus
