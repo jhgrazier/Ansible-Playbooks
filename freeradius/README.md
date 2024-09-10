@@ -25,7 +25,6 @@ Install Playbook to your Ansible Host
 ### Run the Playbooks
 
 #### Playbook Example 1
-
 This playbook creates a self-signed SSL certificate required for Free Radius
 
 ```bash
@@ -54,7 +53,6 @@ freeradius4                : ok=4    changed=2    unreachable=0    failed=0    s
 ```
 
 #### Playbook Example 2
-
 This playbook renews the SSL certificate required for Free Radius
 
 ```bash
@@ -94,4 +92,46 @@ freeradius3                : ok=4    changed=2    unreachable=0    failed=0    s
 freeradius4                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
+## Validation 
+This playbook validates the SSL certificate expiration dates for the renewed certificate.
 
+```bash
+[ansible@ansible ansible-playbooks]$ ansible-playbook freeradius/validate-freeradius-certificate.yaml -K
+BECOME password:
+
+PLAY [Validate FreeRadius certificate Expiration] ********************************************************************************************************************************
+
+TASK [Validate the certificate has been updated with openssl command] ************************************************************************************************************
+changed: [freeradius1]
+changed: [freeradius3]
+changed: [freeradius4]
+changed: [freeradius2]
+
+TASK [debug] *********************************************************************************************************************************************************************
+ok: [freeradius1] => {
+    "out.stdout_lines": [
+        "notAfter=Sep 10 00:05:11 2025 GMT"
+    ]
+}
+ok: [freeradius2] => {
+    "out.stdout_lines": [
+        "notAfter=Sep 10 00:05:11 2025 GMT"
+    ]
+}
+ok: [freeradius3] => {
+    "out.stdout_lines": [
+        "notAfter=Sep 10 00:05:11 2025 GMT"
+    ]
+}
+ok: [freeradius4] => {
+    "out.stdout_lines": [
+        "notAfter=Sep 10 00:05:11 2025 GMT"
+    ]
+}
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+freeradius1                : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius2                : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius3                : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius4                : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```

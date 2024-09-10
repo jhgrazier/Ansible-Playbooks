@@ -1,0 +1,13 @@
+---
+- name: Validate FreeRadius certificate Expiration
+  hosts: freeradius
+  gather_facts: false
+ 
+  tasks:
+    - name: Validate the certificate has been updated with openssl command
+      shell: openssl x509 -enddate -noout -in /etc/raddb/certs/radius.feedthechicken.org.crt
+      register: out
+      become: true
+      become_user: root
+
+    - debug: var=out.stdout_lines
