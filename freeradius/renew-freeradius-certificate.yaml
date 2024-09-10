@@ -1,0 +1,53 @@
+---
+- name: Update FreeRadius certificate
+  hosts: freeradius
+  gather_facts: false
+ 
+  tasks:
+    - name: Backup original radius*.key file
+      copy:
+        src: /etc/raddb/certs/radius.domain.org.key
+        dest: /etc/raddb/certs/radius.domain.org.key
+        backup: yes
+        remote_src: yes
+      become: true
+      become_user: root
+
+    - name: Backup original radius*.crt file
+      copy:
+        src: /etc/raddb/certs/radius.domain.org.crt
+        dest: /etc/raddb/certs/radius.domain.org.crt
+        backup: yes
+        remote_src: yes
+      become: true
+      become_user: root
+
+    - name: Create certificate signing request (CSR) for self-signed certificate
+      community.crypto.openssl_csr_pipe:
+        privatekey_path: /etc/raddb/certs/radius.domain.org.key
+        common_name: Common Name Certificate Authority
+        organizationName: Org Name, LLC.
+        privatekey_passphrase: passphrase
+      register: csr
+      become: true
+      become_user: root
+
+    - name: Renew self-signed certificate from CSR
+      community.crypto.x509_certificate:
+        path: /etc/raddb/certs/radius.domain.org.crt
+        csr_content: "{{ csr.csr }}"
+        privatekey_path: /etc/raddb/certs/radius.domain.org.key
+        privatekey_passphrase: passphrase
+        provider: selfsigned
+        selfsigned_not_after: +365d # valid for one year
+        selfsigned_not_before: "-1d" # valid since yesterday
+        selfsigned_digest: "sha256" # this is the default and can be omitted
+      become: true
+      become_user: root
+
+    - name: restart freeradius
+      become: yes
+      become_user: root
+      systemd:
+        name: radiusd.service
+        state: restarted

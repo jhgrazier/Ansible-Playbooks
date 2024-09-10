@@ -1,6 +1,7 @@
 
 # Juniper Playbooks
 Playbooks for Managing Juniper Devices
+
 ## Installation Requirements
 
 Ansible 2.5
@@ -9,7 +10,7 @@ jxmlease
 xmltodict
 jsnapy
 
-Juniper Required Modules:
+###Juniper Required Modules
 
 ```bash
 ansible-galaxy collection install juniper.device
@@ -23,13 +24,12 @@ pip install jsnapy
 
 ## Playbook Usage / Examples
 
-Install Playbook to your Ansible Host
-
+###Install Playbook to your Ansible Host
 Depending on what you need, you can pull system configuration, interface configuration, services configuration, etc.
 
 Run the Playbooks
 
-Playbook Example 1
+####Playbook Example 1
 This specific playbook will pull system/services configuration and display it on the terminal in an XML format.
 
 ```bash
@@ -922,7 +922,7 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-Playbook Example 2
+####Playbook Example 2
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
@@ -964,7 +964,7 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-Playbook Example 3
+####Playbook Example 3
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
@@ -1011,7 +1011,7 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-Playbook Example 4
+####Playbook Example 4
 This specific playbook will pull all configuration and dump into a file on your ansible server.
 
 ```bash
