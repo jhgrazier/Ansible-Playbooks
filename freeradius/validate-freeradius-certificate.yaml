@@ -5,7 +5,7 @@
  
   tasks:
     - name: Validate the certificate has been updated with openssl command
-      shell: openssl x509 -enddate -noout -in /etc/raddb/certs/radius.feedthechicken.org.crt
+      shell: openssl x509 -enddate -noout -in /etc/raddb/certs/radius.domain.org.crt
       register: out
       become: true
       become_user: root
