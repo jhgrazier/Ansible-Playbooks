@@ -10,7 +10,7 @@ jxmlease
 xmltodict
 jsnapy
 
-###Juniper Required Modules
+### Juniper Required Modules
 
 ```bash
 ansible-galaxy collection install juniper.device
@@ -29,7 +29,7 @@ Depending on what you need, you can pull system configuration, interface configu
 
 Run the Playbooks
 
-####Playbook Example 1
+#### Playbook Example 1
 This specific playbook will pull system/services configuration and display it on the terminal in an XML format.
 
 ```bash
@@ -922,7 +922,7 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-####Playbook Example 2
+#### Playbook Example 2
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
@@ -964,7 +964,7 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-####Playbook Example 3
+#### Playbook Example 3
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
@@ -1011,10 +1011,10 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-####Playbook Example 4
+#### Playbook Example 4
 This specific playbook will push configuraton to an interface, or really any configuration you want as long as you edit the file "junos_apply_set_commands.set" with the commands that you want to set.
 
-#####Example contents of junos_apply_set_commands.set File
+##### Example contents of junos_apply_set_commands.set File
 
 ```bash
 set interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-200
@@ -1054,7 +1054,7 @@ PLAY RECAP *********************************************************************
 juniper1.ignyte.lab        : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-####Playbook Example 5
+#### Playbook Example 5
 This specific playbook will pull all configuration and dump into a file on your ansible server.
 
 ```bash
