@@ -1,0 +1,30 @@
+--- 
+ - name: Set Junos OS configuration via SSH
+   hosts: juniper
+   connection: local
+   gather_facts: no
+   roles:
+     - juniper.junos
+
+   vars:
+     connection_settings:
+       host: "{{ ansible_host }}"
+       timeout: 90
+       port: 22
+
+   tasks:
+
+     - name: Apply set configuration
+       juniper_junos_config:
+         provider: "{{ connection_settings }}"
+         load: set
+         commit: yes
+         src: "junos_apply_set_commands.set"
+         comment: 'Ansible Commit Confirmed'
+         diff: yes
+         ignore_warning: true
+       register: config_results
+
+     - name: "Print result"
+       debug:
+         var: config_results

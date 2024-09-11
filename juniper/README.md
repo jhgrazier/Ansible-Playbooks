@@ -1012,6 +1012,49 @@ juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    s
 ```
 
 ####Playbook Example 4
+This specific playbook will push configuraton to an interface, or really any configuration you want as long as you edit the file "junos_apply_set_commands.set" with the commands that you want to set.
+
+#####Example contents of junos_apply_set_commands.set File
+
+```bash
+set interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-200
+delete interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-150
+```
+
+Run the Playbook
+
+```bash
+  [ansible@ansible ansible-playbooks]$ ansible-playbook juniper/juniper-set-interface-configuration-hierarchies.yaml
+
+PLAY [Set Junos OS configuration via SSH] ****************************************************************************************************************************************
+
+TASK [Apply set configuration] ***************************************************************************************************************************************************
+changed: [juniper1.ignyte.lab]
+
+TASK [Print result] **************************************************************************************************************************************************************
+ok: [juniper1.ignyte.lab] => {
+    "config_results": {
+        "changed": true,
+        "diff": {
+            "prepared": "\n[edit interfaces ge-0/0/6 unit 0 family ethernet-switching vlan]\n-       members vlan-150;\n+       members vlan-200;\n"
+        },
+        "diff_lines": [
+            "",
+            "[edit interfaces ge-0/0/6 unit 0 family ethernet-switching vlan]",
+            "-       members vlan-150;",
+            "+       members vlan-200;"
+        ],
+        "failed": false,
+        "file": "junos_apply_set_commands.set",
+        "msg": "Configuration has been: opened, loaded, checked, diffed, committed, closed."
+    }
+}
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+juniper1.ignyte.lab        : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+
+####Playbook Example 5
 This specific playbook will pull all configuration and dump into a file on your ansible server.
 
 ```bash
