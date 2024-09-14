@@ -1,0 +1,525 @@
+“!Command: show running-config
+!Running configuration last done at: Sat Sep 14 02:40:03 2024
+!Time: Sat Sep 14 02:40:34 2024
+
+version 9.2(1) Bios:version  
+hostname cisco-nexus1
+vdc cisco-nexus1 id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 511
+  limit-resource u4route-mem minimum 248 maximum 248
+  limit-resource u6route-mem minimum 96 maximum 96
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+feature scp-server
+feature sftp-server
+feature ospf
+feature bgp
+feature isis
+feature interface-vlan
+
+username admin password 5 $5$KyTOiGPj$b3c1qKLPreYVFnP0TjR6wk30Uv3/hKZUWMrAVxoVsp3  role network-admin
+username jhgrazier password 5 $5$WFYs51XX$d5HbJOW5qpPzDb8n09E5kWUgQJAmdW/2/VOtLzHoXn6  role priv-15
+username jhgrazier role network-admin
+username sbonham password 5 $5$ABGGFF$dlbmHLFd9Zr4DWvk/Y/2TpSMJYrJNaCISbLo1geO.c9  role network-operator
+username sbonham role network-admin
+username ansible password 5 !  role network-operator
+username ansible role network-admin
+username ansible sshkey ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtSSAo0Iuxbzq90zfAZYgeSDkTMwgEUZFaS61WHJYdgUFWFx3XNh0bk9f7Rgz+9n084mWwa3UyJN2iwZQ4mfECABEDWVuG/kWesnw22VT+FsRNqNUNcQND6bGXfKSq23JdCrblGqEjIGhz73dhuKiIU9H7Fb0bFFP9uhEoD+Hmlq/e3pic0GDNfCSNG6HquI9EF3xu2WO23oMTuionNJbIfeOE2Q7capCq9Vg4kh2Ipw2mtgl8zIlTkNcZ9PWe7Rwr+kzQiRLrOEmWWOQ11Mns3nzix+kr4O8LrVrF/7M9JVw0AhKawJp6P5noL52XOejXNtIGk1TTst0kKtHqEM4DA2+vGEvVYR8J6PO59CN7PfSKRqDWRkT+cQ/3su9aqPSDhhq8Ize/82TIuicJ7dIbhE+2B5vPYIFfCtDdYhNaRvWIP2MGApnj2vmww+XcIb6/2IM0UjmQ6BHSGTNIu/5cWQRkqMZP+PBW6BJqgpN9HMvRpWYxqLdbpCdg2srSGw8= ansible@ansible
+
+banner motd @
+                     **** WARNING NOTICE ****
+This system is restricted solely to authorized users for legitimate
+  purposes only. The actual or attempted unauthorized access, use
+      or modification of this system is strictly prohibited.
+   Unauthorized users are subject to disciplinary proceedings
+and/or criminal and civil penalties under state, federal or other
+applicable domestic and foreign laws. The use of this system may be
+monitored and recorded for administrative and security reasons. Anyone
+accessing this system expressly consents to such monitoring and is
+advised that if such monitoring reveals possible evidence of criminal
+activity, the owner may provide the evidence of such activity to law
+                      enforcement officials.
+@
+
+ip domain-lookup
+ip name-server 192.168.120.1
+crypto key param rsa label vswitch1 modulus 2048 
+copp profile strict
+ip ssh source-interface mgmt0
+snmp-server user ansible network-operator 
+snmp-server user ansible network-admin
+snmp-server user admin auth md5 0x46b60440e41afbd97ec8fb96f35e7397 priv 0x46b60440e41afbd97ec8fb96f35e7397 localizedkey engineID 128:0:0:9:3:0:12:41:190:147:216
+snmp-server user sbonham auth md5 0x205e03ff3acb97cd39badd78c5ebd7d6 priv 0x205e03ff3acb97cd39badd78c5ebd7d6 localizedkey engineID 128:0:0:9:3:0:12:41:190:147:216
+snmp-server user jhgrazier auth md5 0x46b60440e41afbd97ec8fb96f35e7397 priv 0x46b60440e41afbd97ec8fb96f35e7397 localizedkey engineID 128:0:0:9:3:0:12:41:190:147:216
+rmon event 1 description FATAL(1) owner PMON@FATAL
+rmon event 2 description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 description ERROR(3) owner PMON@ERROR
+rmon event 4 description WARNING(4) owner PMON@WARNING
+rmon event 5 description INFORMATION(5) owner PMON@INFO
+snmp-server community DveviM5YpB!! group network-operator
+
+ip route 0.0.0.0/0 Ethernet1/1 192.168.120.1
+vlan 1,100,200,300,400
+
+ip prefix-list BGP_ROUTES seq 5 permit 192.168.128.0/24 le 32 
+ip prefix-list BGP_ROUTES seq 10 permit 192.168.129.0/24 le 32 
+ip prefix-list BGP_ROUTES seq 15 permit 192.168.130.0/24 le 32 
+ip prefix-list OSPF-LOOPBACKS seq 10 permit 192.168.160.0/29 ge 30 
+route-map BGP-ROUTES permit 10
+  match ip address prefix-list BGP_ROUTES 
+route-map LOCAL-PREF permit 10
+  match ospf-area 20010
+  set local-preference 200
+route-map OSPF-LOOPBACKS permit 10
+  match ip address prefix-list OSPF-LOOPBACKS 
+vrf context management
+  ip route 0.0.0.0/0 mgmt0 10.10.1.1
+
+
+interface Vlan1
+
+interface Vlan100
+  no shutdown
+  ip address 192.168.128.1/24
+
+interface Vlan200
+  no shutdown
+  ip address 192.168.129.1/24
+
+interface Vlan300
+  no shutdown
+  ip address 192.168.130.1/24
+
+interface Ethernet1/1
+  description P2P Link for MGMT
+  no switchport
+  ip address 192.168.120.4/24
+  ip router ospf 20010 area 0.0.164.85
+  no shutdown
+
+interface Ethernet1/2
+  switchport mode trunk
+  switchport trunk allowed vlan 100
+
+interface Ethernet1/3
+  switchport mode trunk
+  switchport trunk allowed vlan 200
+
+interface Ethernet1/4
+  switchport mode trunk
+  switchport trunk allowed vlan 300
+
+interface Ethernet1/5
+  no cdp enable
+  no switchport
+  ip address 172.16.25.2/24
+  ip verify unicast source reachable-via any allow-default
+  isis network point-to-point
+  ip router isis 300
+  no shutdown
+
+interface Ethernet1/6
+  shutdown
+
+interface Ethernet1/7
+  shutdown
+
+interface Ethernet1/8
+  shutdown
+
+interface Ethernet1/9
+  shutdown
+
+interface Ethernet1/10
+  shutdown
+
+interface Ethernet1/11
+  shutdown
+
+interface Ethernet1/12
+  shutdown
+
+interface Ethernet1/13
+  shutdown
+
+interface Ethernet1/14
+  shutdown
+
+interface Ethernet1/15
+  shutdown
+
+interface Ethernet1/16
+  shutdown
+
+interface Ethernet1/17
+  shutdown
+
+interface Ethernet1/18
+  shutdown
+
+interface Ethernet1/19
+  shutdown
+
+interface Ethernet1/20
+  shutdown
+  switchport trunk allowed vlan 100
+
+interface Ethernet1/21
+  shutdown
+
+interface Ethernet1/22
+  shutdown
+
+interface Ethernet1/23
+  shutdown
+
+interface Ethernet1/24
+  shutdown
+
+interface Ethernet1/25
+  shutdown
+
+interface Ethernet1/26
+  shutdown
+
+interface Ethernet1/27
+  shutdown
+
+interface Ethernet1/28
+  shutdown
+
+interface Ethernet1/29
+  shutdown
+
+interface Ethernet1/30
+  shutdown
+  switchport trunk allowed vlan 200
+
+interface Ethernet1/31
+  shutdown
+
+interface Ethernet1/32
+  shutdown
+
+interface Ethernet1/33
+  shutdown
+
+interface Ethernet1/34
+  shutdown
+
+interface Ethernet1/35
+  shutdown
+
+interface Ethernet1/36
+  shutdown
+
+interface Ethernet1/37
+  shutdown
+
+interface Ethernet1/38
+  shutdown
+
+interface Ethernet1/39
+  shutdown
+
+interface Ethernet1/40
+  shutdown
+  switchport trunk allowed vlan 300
+
+interface Ethernet1/41
+  shutdown
+
+interface Ethernet1/42
+  shutdown
+
+interface Ethernet1/43
+  shutdown
+
+interface Ethernet1/44
+  shutdown
+
+interface Ethernet1/45
+  shutdown
+
+interface Ethernet1/46
+  shutdown
+
+interface Ethernet1/47
+  shutdown
+
+interface Ethernet1/48
+  shutdown
+
+interface Ethernet1/49
+  shutdown
+
+interface Ethernet1/50
+  shutdown
+
+interface Ethernet1/51
+  shutdown
+
+interface Ethernet1/52
+  shutdown
+
+interface Ethernet1/53
+  shutdown
+
+interface Ethernet1/54
+  shutdown
+
+interface Ethernet1/55
+  shutdown
+
+interface Ethernet1/56
+  shutdown
+
+interface Ethernet1/57
+  shutdown
+
+interface Ethernet1/58
+  shutdown
+
+interface Ethernet1/59
+  shutdown
+
+interface Ethernet1/60
+  shutdown
+
+interface Ethernet1/61
+  shutdown
+
+interface Ethernet1/62
+  shutdown
+
+interface Ethernet1/63
+  shutdown
+
+interface Ethernet1/64
+  shutdown
+
+interface Ethernet1/65
+  shutdown
+
+interface Ethernet1/66
+  shutdown
+
+interface Ethernet1/67
+  shutdown
+
+interface Ethernet1/68
+  shutdown
+
+interface Ethernet1/69
+  shutdown
+
+interface Ethernet1/70
+  shutdown
+
+interface Ethernet1/71
+  shutdown
+
+interface Ethernet1/72
+  shutdown
+
+interface Ethernet1/73
+  shutdown
+
+interface Ethernet1/74
+  shutdown
+
+interface Ethernet1/75
+  shutdown
+
+interface Ethernet1/76
+  shutdown
+
+interface Ethernet1/77
+  shutdown
+
+interface Ethernet1/78
+  shutdown
+
+interface Ethernet1/79
+  shutdown
+
+interface Ethernet1/80
+  shutdown
+
+interface Ethernet1/81
+  shutdown
+
+interface Ethernet1/82
+  shutdown
+
+interface Ethernet1/83
+  shutdown
+
+interface Ethernet1/84
+  shutdown
+
+interface Ethernet1/85
+  shutdown
+
+interface Ethernet1/86
+  shutdown
+
+interface Ethernet1/87
+  shutdown
+
+interface Ethernet1/88
+  shutdown
+
+interface Ethernet1/89
+  shutdown
+
+interface Ethernet1/90
+  shutdown
+
+interface Ethernet1/91
+  shutdown
+
+interface Ethernet1/92
+  shutdown
+
+interface Ethernet1/93
+  shutdown
+
+interface Ethernet1/94
+  shutdown
+
+interface Ethernet1/95
+  shutdown
+
+interface Ethernet1/96
+  shutdown
+
+interface Ethernet1/97
+  shutdown
+
+interface Ethernet1/98
+  shutdown
+
+interface Ethernet1/99
+  shutdown
+
+interface Ethernet1/100
+  shutdown
+
+interface Ethernet1/101
+  shutdown
+
+interface Ethernet1/102
+  shutdown
+
+interface Ethernet1/103
+  shutdown
+
+interface Ethernet1/104
+  shutdown
+
+interface Ethernet1/105
+  shutdown
+
+interface Ethernet1/106
+  shutdown
+
+interface Ethernet1/107
+  shutdown
+
+interface Ethernet1/108
+  shutdown
+
+interface Ethernet1/109
+  shutdown
+
+interface Ethernet1/110
+  shutdown
+
+interface Ethernet1/111
+  shutdown
+
+interface Ethernet1/112
+  shutdown
+
+interface Ethernet1/113
+  shutdown
+
+interface Ethernet1/114
+  shutdown
+
+interface Ethernet1/115
+  shutdown
+
+interface Ethernet1/116
+  shutdown
+
+interface Ethernet1/117
+  shutdown
+
+interface Ethernet1/118
+  shutdown
+
+interface Ethernet1/119
+  shutdown
+
+interface Ethernet1/120
+  shutdown
+
+interface Ethernet1/121
+  shutdown
+
+interface Ethernet1/122
+  shutdown
+
+interface Ethernet1/123
+  shutdown
+
+interface Ethernet1/124
+  shutdown
+
+interface Ethernet1/125
+  shutdown
+
+interface Ethernet1/126
+  shutdown
+
+interface Ethernet1/127
+  shutdown
+
+interface Ethernet1/128
+  shutdown
+
+interface mgmt0
+  vrf member management
+  ip address 10.10.1.7/24
+
+interface loopback0
+  ip address 192.168.160.3/32
+  ip ospf network point-to-point
+  ip router ospf 20010 area 0.0.164.85
+line console
+line vty
+boot nxos bootflash:/nxos.9.2.1.bin 
+router ospf 20010
+  router-id 192.168.120.4
+  default-information originate
+  area 0.0.164.85 filter-list route-map OSPF-LOOPBACKS out
+  area 0.0.164.85 filter-list route-map OSPF-LOOPBACKS in
+router bgp 200
+  router-id 192.168.160.3
+  log-neighbor-changes
+  address-family ipv4 unicast
+    network 192.168.128.0/24
+    network 192.168.129.0/24
+    network 192.168.130.0/24
+  neighbor 192.168.160.2
+    remote-as 200
+    dont-capability-negotiate
+    update-source loopback0
+    address-family ipv4 unicast
+      prefix-list BGP-ROUTES out
+      soft-reconfiguration inbound”

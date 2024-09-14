@@ -1,0 +1,27 @@
+---
+ - name: Get CSR1000V OS configuration via SSH
+   hosts: cisco_routers
+   connection: local
+   gather_facts: true
+
+   vars:
+     cfg_dir: "csr1000v/configs"
+     conf_file: "{{ cfg_dir }}"
+     connection_settings:
+     host: "{{ ansible_host }}"
+
+   tasks:
+     - name: confirm or create configs directory
+       file:
+         path: "{{ cfg_dir }}"
+         state: directory
+
+     - name: Get selected configuration hierarchies and save to file
+       ios_command:
+         commands: "show running-config"
+       register: config
+
+     - name: Save config output
+       copy:
+         content: “{{ config.stdout[0] }}”
+         dest: "{{ conf_file }}/show_run_{{ inventory_hostname }}.txt"

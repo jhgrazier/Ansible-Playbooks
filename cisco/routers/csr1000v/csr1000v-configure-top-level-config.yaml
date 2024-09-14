@@ -1,0 +1,47 @@
+---
+ - name: Configure top level config
+   hosts: cisco_routers
+   gather_facts: false
+
+   tasks:
+     - name: Configure hostname
+       cisco.ios.ios_hostname:
+        config:
+          hostname: "{{ inventory_hostname }}"
+        state: merged
+
+     - name: configure DNS lookup sources
+       cisco.ios.ios_system:
+         lookup_enabled: no
+
+     - name: configure name servers
+       cisco.ios.ios_system:
+         name_servers:
+         - 192.168.120.1
+
+     - name: Remove uneeded banners
+       ios_banner:
+         banner: "{{ item }}"
+         state: absent
+       loop:
+       - motd
+       - exec
+       - incoming
+
+     - name: Update login banner
+       ios_banner:
+         banner: login
+         text: |
+           **** WARNING NOTICE ****
+           This system is restricted solely to authorized users for legitimate
+           purposes only. The actual or attempted unauthorized access, use 
+           or modification of this system is strictly prohibited.
+           Unauthorized users are subject to disciplinary proceedings
+           and/or criminal and civil penalties under state, federal or other
+           applicable domestic and foreign laws. The use of this system may be
+           monitored and recorded for administrative and security reasons. Anyone
+           accessing this system expressly consents to such monitoring and is 
+           advised that if such monitoring reveals possible evidence of criminal 
+           activity, the owner may provide the evidence of such activity to law 
+           enforcement officials.
+         state: present

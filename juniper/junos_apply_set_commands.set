@@ -1,3 +1,2 @@
+set interfaces ge-0/0/6 unit 0 family ethernet-switching interface-mode trunk
 set interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-200
-delete interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-150
-set interfaces ge-0/0/6 description A10-DATA-PORT
