@@ -80,9 +80,6 @@ diagnostic bootup level minimal
 spanning-tree extend system-id
 !
 !
-username jhgrazier privilege 15 secret 5 $1$eGHq$siD6oDtFw.jz8pj6l3krl0
-username sbonham privilege 15 secret 5 $1$zvDS$m.SluO2GTNVDu7yR2yHDC/
-username ansible privilege 15
 !
 redundancy
 !
@@ -198,8 +195,6 @@ ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 192.168.120.1
 ip ssh source-interface GigabitEthernet1
 ip ssh version 2
 ip ssh pubkey-chain
-  username ansible
-   key-hash ssh-rsa 706CE4D3D3361F90CF87F2829C31E8CC
 !
 !
 !
