@@ -1,6 +1,6 @@
 ---
  - name: Configure top level config
-   hosts: cisco_nexus9k
+   hosts: nexus9k
    gather_facts: false
 
    tasks:

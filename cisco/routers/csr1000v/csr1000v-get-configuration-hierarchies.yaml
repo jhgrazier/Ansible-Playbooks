@@ -1,6 +1,6 @@
 ---
  - name: Get CSR1000V OS configuration via SSH
-   hosts: cisco_routers
+   hosts: csr_1000v
    connection: local
    gather_facts: true
 

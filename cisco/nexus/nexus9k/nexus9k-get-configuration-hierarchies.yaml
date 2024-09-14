@@ -1,6 +1,6 @@
 ---
  - name: Get Nexus 9K OS configuration via SSH
-   hosts: cisco_nexus9k
+   hosts: nexus9k
    connection: local
    gather_facts: true
 

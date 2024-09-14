@@ -1,6 +1,6 @@
 ---
  - name: Configure top level config
-   hosts: cisco_routers
+   hosts: csr_1000v
    gather_facts: false
 
    tasks:

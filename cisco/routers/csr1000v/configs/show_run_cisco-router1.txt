@@ -1,0 +1,261 @@
+“Building configuration...
+
+Current configuration : 4666 bytes
+!
+! Last configuration change at 15:32:31 UTC Sat Sep 14 2024 by ansible
+!
+version 16.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console auto
+!
+hostname cisco-router1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication enable default none
+aaa authorization exec default local if-authenticated 
+!
+!
+!
+!
+!
+aaa session-id common
+no process cpu autoprofile hog
+!
+ip multicast-routing distributed
+!
+!
+!
+!
+!
+!
+!
+!
+ip name-server 192.168.120.1
+no ip domain lookup
+ip domain name ignyte.lab
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+!
+multilink bundle-name authenticated
+!
+domain ignyte.lab
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CSR1000V sn 99E74LGZD6J
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+username jhgrazier privilege 15 secret 5 $1$eGHq$siD6oDtFw.jz8pj6l3krl0
+username sbonham privilege 15 secret 5 $1$zvDS$m.SluO2GTNVDu7yR2yHDC/
+username ansible privilege 15
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+! 
+! 
+! 
+! 
+!
+!
+interface Loopback0
+ ip address 192.168.160.2 255.255.255.255
+ ip ospf 400 area 0.0.164.85
+!
+interface GigabitEthernet1
+ description P2P Link for MGMT
+ ip address 192.168.120.3 255.255.255.0
+ no ip redirects
+ ip ospf 400 area 0.0.164.85
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet2
+ dampening
+ ip address 172.16.25.1 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip router isis 300
+ load-interval 30
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ ip address 172.16.29.1 255.255.255.0
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+router ospf 400
+ router-id 192.168.120.3
+ network 192.168.160.0 0.0.0.255 area 0.0.164.85
+ default-information originate
+!
+router isis 300
+ net 49.0000.0000.0000.0000.0003.00
+ is-type level-2-only
+ router-id Loopback0
+ metric-style wide
+ log-adjacency-changes
+ nsf ietf
+ passive-interface default
+ no passive-interface GigabitEthernet2
+!
+router bgp 200
+ bgp router-id 192.168.160.2
+ bgp log-neighbor-changes
+ bgp graceful-restart restart-time 1
+ bgp graceful-restart
+ neighbor 192.168.160.1 remote-as 200
+ neighbor 192.168.160.1 description juniper-srx
+ neighbor 192.168.160.1 update-source Loopback0
+ neighbor 192.168.160.3 remote-as 200
+ neighbor 192.168.160.3 description nexus-switch
+ neighbor 192.168.160.3 dont-capability-negotiate enhanced-refresh
+ neighbor 192.168.160.3 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.128.0
+  network 192.168.129.0
+  network 192.168.130.0
+  neighbor 192.168.160.1 activate
+  neighbor 192.168.160.1 route-reflector-client
+  neighbor 192.168.160.1 soft-reconfiguration inbound
+  neighbor 192.168.160.1 prefix-list BGP-ROUTES out
+  neighbor 192.168.160.3 activate
+  neighbor 192.168.160.3 next-hop-self
+  neighbor 192.168.160.3 soft-reconfiguration inbound
+  neighbor 192.168.160.3 prefix-list BGP-ROUTES in
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 192.168.120.1
+ip ssh source-interface GigabitEthernet1
+ip ssh version 2
+ip ssh pubkey-chain
+  username ansible
+   key-hash ssh-rsa 706CE4D3D3361F90CF87F2829C31E8CC
+!
+!
+!
+ip prefix-list BGP_ROUTES seq 5 permit 192.168.128.0/24 le 32
+ip prefix-list BGP_ROUTES seq 10 permit 192.168.129.0/24 le 32
+ip prefix-list BGP_ROUTES seq 15 permit 192.168.130.0/24 le 32
+!
+!
+route-map OSPF-LOOPBACKS permit 10
+ match ip address prefix-list OSPF-LOOPBACKS
+!
+route-map BGP-ROUTES permit 10
+ match ip address prefix-list BGP_ROUTES
+!
+snmp-server community public RO
+!
+!
+!
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+!
+!
+!
+banner login ^C
+**** WARNING NOTICE ****
+This system is restricted solely to authorized users for legitimate
+purposes only. The actual or attempted unauthorized access, use 
+or modification of this system is strictly prohibited.
+Unauthorized users are subject to disciplinary proceedings
+and/or criminal and civil penalties under state, federal or other
+applicable domestic and foreign laws. The use of this system may be
+monitored and recorded for administrative and security reasons. Anyone
+accessing this system expressly consents to such monitoring and is 
+advised that if such monitoring reveals possible evidence of criminal 
+activity, the owner may provide the evidence of such activity to law 
+enforcement officials.
+^C
+!
+line con 0
+ stopbits 1
+line vty 1
+ length 0
+line vty 2 4
+!
+wsma agent exec
+!
+wsma agent config
+!
+wsma agent filesys
+!
+wsma agent notify
+!
+!
+end”
