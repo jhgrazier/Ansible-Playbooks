@@ -63,7 +63,7 @@ Depending on what you need, you can pull system configuration, interface configu
 Run the Playbooks
 
 #### Playbook Example 1
-This specific playbook will interface configuration and display it on the terminal in an XML format.
+This specific playbook will pull interface configuration and display it on the terminal in an XML format.
 
 ```bash
 [ansible@ansible nexus]$ ansible-playbook nexus9k/nexus9k-get-configuration-interface-hierarchies.yaml
