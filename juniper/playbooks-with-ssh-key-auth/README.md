@@ -96,7 +96,7 @@ Run the Playbooks
 This specific playbook will pull system/services configuration and display it on the terminal in an XML format.
 
 ```bash
-  [ansible@ansible]$ ansible-playbook juniper/juniper-get-all-interface-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper/juniper-get-all-interface-configuration-hierarchies.yaml
 
 PLAY [Get Junos OS configuration via SSH] ****************************************************************************************************************************************
 
@@ -116,7 +116,7 @@ juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    s
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
-  [ansible@ansible]$ ansible-playbook juniper/juniper-get-interface-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper/juniper-get-interface-configuration-hierarchies.yaml
 
 PLAY [Get Junos OS configuration via SSH] ****************************************************************************************************************************************
 
@@ -158,7 +158,7 @@ juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    s
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
-  [ansible@ansible]$ ansible-playbook juniper/juniper-get-system_services-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper/juniper-get-system_services-configuration-hierarchies.yaml
 
 PLAY [Get Junos OS configuration via SSH] ****************************************************************************************************************************************
 
@@ -214,7 +214,7 @@ delete interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-15
 Run the Playbook
 
 ```bash
-  [ansible@ansible ansible-playbooks]$ ansible-playbook juniper/juniper-set-interface-configuration-hierarchies.yaml
+[ansible@ansible ansible-playbooks]$ ansible-playbook juniper/juniper-set-interface-configuration-hierarchies.yaml
 
 PLAY [Set Junos OS configuration via SSH] ****************************************************************************************************************************************
 
@@ -248,7 +248,7 @@ juniper1.ignyte.lab        : ok=2    changed=1    unreachable=0    failed=0    s
 This specific playbook will pull all configuration and dump into a file on your ansible server.
 
 ```bash
-  [ansible@ansible ansible-playbooks]$ ansible-playbook juniper/juniper-get-configuration-hierarchies.yaml
+[ansible@ansible ansible-playbooks]$ ansible-playbook juniper/juniper-get-configuration-hierarchies.yaml
 
 PLAY [Get Junos OS configuration via SSH] ****************************************************************************************************************************************
 
