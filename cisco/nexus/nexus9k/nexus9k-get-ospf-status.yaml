@@ -1,0 +1,15 @@
+---
+ - name: Get Nexus 9K OSPF Neighbors/Database via SSH
+   hosts: nexus9k
+   connection: local
+   gather_facts: true
+
+   tasks:
+     - name: Get OSPF Neighbors/Database and Display on Terminal
+       ios_command:
+         commands: "show ip ospf database"
+       register: response
+
+     - name: "Print result"
+       debug:
+         var: response

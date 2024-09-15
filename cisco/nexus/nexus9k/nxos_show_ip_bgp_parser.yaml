@@ -1,0 +1,13 @@
+vars:
+  route:
+    network: "{{ item.network }}"
+    next_hop: "{{ item.next_hop }}"
+    metric: "{{ item.metric }}"
+    local_preference: "{{ item.local_pref }}"
+    weight: "{{ item.weight }}"
+    path: " {{ item.path }}"
+    installed: "{{ item.status_var == '>' }}"
+keys:
+  bgp_routes:
+    value: "{{ route }}"
+    items: "\\*(?P<status_var>\\S)(?P<bgp_session>\\w)(?P<network>[0-9./]+)\\s+(?P<next_hop>[0-9./]+)\\s{10,20}(?P<metric>\\d+|[ ])\\s{5,20}(?P<local_pref>\\d+|[ ])\\s{5,20}(?P<weight>\\d+)\\s{1}(?P<path>.+)"

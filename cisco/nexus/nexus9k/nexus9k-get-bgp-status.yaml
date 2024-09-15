@@ -1,0 +1,22 @@
+---
+ - name: Get Nexus 9K BGP Summary and Advertised/Received Routes via SSH
+   hosts: nexus9k
+   connection: local
+   gather_facts: true
+   vars:
+    bgp_parse_path: /path/to/parsers/nxos_show_ip_bgp_parser.yml
+
+   tasks:
+     - name: Get BGP Summary and Display on Terminal
+       ios_command:
+         commands: "show ip bgp summary"
+       register: response
+
+     - name: Get BGP Info and Display on Terminal
+       ios_command:
+         commands: "show ip bgp"
+       register: response
+
+     - name: "Print result"
+       debug:
+         var: response

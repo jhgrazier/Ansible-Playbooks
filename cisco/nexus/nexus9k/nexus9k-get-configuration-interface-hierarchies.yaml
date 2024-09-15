@@ -1,0 +1,15 @@
+---
+ - name: Get Nexus 9K Interface configuration via SSH
+   hosts: nexus9k
+   connection: local
+   gather_facts: true
+
+   tasks:
+     - name: Get selected configuration hierarchies and save to file
+       ios_command:
+         commands: "show running-config interface"
+       register: response
+
+     - name: "Print result"
+       debug:
+         var: response
