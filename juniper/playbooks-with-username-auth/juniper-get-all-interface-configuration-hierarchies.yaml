@@ -1,0 +1,29 @@
+--- 
+ - name: Get Junos OS configuration via SSH
+   hosts: juniper
+   connection: local
+   gather_facts: no
+   roles:
+     - juniper.junos
+
+   vars_prompt:
+      - name: username
+        prompt: Junos Username
+        private: no
+
+      - name: password
+        prompt: Junos Password
+        private: yes
+
+   tasks:
+
+     - name: Get selected configuration hierarchies
+       juniper.device.config:
+         retrieve: "committed"
+         filter: "interfaces"
+         format: "xml"
+       register: response
+
+     - name: "Print result"
+       debug:
+         var: response

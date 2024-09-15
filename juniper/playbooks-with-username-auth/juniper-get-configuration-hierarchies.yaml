@@ -1,0 +1,33 @@
+--- 
+ - name: Get Junos OS configuration via SSH
+   hosts: juniper
+   connection: local
+   gather_facts: no
+   roles:
+     - juniper.junos
+
+   vars_prompt:
+      - name: username
+        prompt: Junos Username
+        private: no
+
+      - name: password
+        prompt: Junos Password
+        private: yes
+
+   vars:
+     cfg_dir: "configs"
+     conf_file: "{{ cfg_dir }}"
+     connection_settings:
+     host: "{{ ansible_host }}"
+
+   tasks:
+     - name: confirm or create configs directory
+       file:
+         path: "{{ cfg_dir }}"
+         state: directory
+
+     - name: Get selected configuration hierarchies and save to file 
+       juniper.device.config:
+         retrieve: "committed"
+         destdir: "{{ conf_file }}" 
