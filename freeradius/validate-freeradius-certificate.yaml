@@ -11,3 +11,11 @@
       become_user: root
 
     - debug: var=out.stdout_lines
+
+    - name: Validate the certificate has been updated with md5sum command
+      shell: md5sum /etc/raddb/certs/radius.domain.org.crt
+      register: out
+      become: true
+      become_user: root
+
+    - debug: var=out.stdout_lines

@@ -28,7 +28,7 @@ Install Playbook to your Ansible Host
 This playbook creates a self-signed SSL certificate required for Free Radius
 
 ```bash
-  [ansible@ansible]$ ansible-playbook freeradius/create-freeradius-certificate.yaml -K
+[ansible@ansible]$ ansible-playbook freeradius/create-freeradius-certificate.yaml -K
 BECOME password:
 
 PLAY [Create FreeRadius certificate] *********************************************************************************************************************************************
@@ -56,7 +56,7 @@ freeradius4                : ok=4    changed=2    unreachable=0    failed=0    s
 This playbook renews the SSL certificate required for Free Radius
 
 ```bash
- [ansible@ansible]$ ansible-playbook freeradius/renew-freeradius-certificate.yaml -K
+ansible@ansible]$ ansible-playbook freeradius/renew-freeradius-certificate.yaml -K
 BECOME password:
 
 PLAY [Update FreeRadius certificate] *********************************************************************************************************************************************
