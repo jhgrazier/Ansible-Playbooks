@@ -1,14 +1,14 @@
 ---
 - name: Update FreeRadius certificate
-  hosts: freeradius
   gather_facts: false
- 
+  hosts: localhost
+
   tasks:
     - name: Create certificate signing request (CSR) for self-signed certificate
       community.crypto.openssl_csr_pipe:
-        privatekey_path: /etc/raddb/certs/radius.domain.org.key
-        common_name: Common Name Certificate Authority
-        organizationName: Org Name, LLC.
+        privatekey_path: radius.domain.org.key
+        common_name: Generic Domain Certificate Authority
+        organizationName: Generic Domain, LLC.
         privatekey_passphrase: passphrase
       register: csr
       become: true
@@ -16,9 +16,9 @@
 
     - name: Renew self-signed certificate from CSR
       community.crypto.x509_certificate:
-        path: /etc/raddb/certs/radius.domain.org.crt
+        path: radius.domain.org.crt
         csr_content: "{{ csr.csr }}"
-        privatekey_path: /etc/raddb/certs/radius.domain.org.key
+        privatekey_path: radius.domain.org.key
         privatekey_passphrase: passphrase
         provider: selfsigned
         selfsigned_not_after: +365d # valid for one year
@@ -27,9 +27,29 @@
       become: true
       become_user: root
 
-    - name: restart freeradius
-      become: yes
-      become_user: root
-      systemd:
-        name: radiusd.service
-        state: restarted
+- name: Copy new keys, certificates and restart Free Radius
+  hosts: freeradius
+
+  tasks:
+  - name: Copy new radius.domain.org.key to remote servers
+    ansible.builtin.copy:
+      src: radius.domain.org.key
+      dest: /etc/raddb/certs/radius.domain.org.key
+      remote_src: no
+    become: true
+    become_user: root
+
+  - name: Copy new radius.domain.org.crt certificate to remote servers
+    ansible.builtin.copy:
+      src: radius.domain.org.crt
+      dest: /etc/raddb/certs/radius.domain.org.crt
+      remote_src: no
+    become: true
+    become_user: root
+
+  - name: restart freeradius
+    ansible.builtin.systemd_service:
+      name: radiusd.service
+      state: restarted
+    become: yes
+    become_user: root
