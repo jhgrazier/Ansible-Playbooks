@@ -43,11 +43,32 @@ changed: [freeradius3]
 changed: [freeradius1]
 changed: [freeradius2]
 
+TASK [Copy new radius.domain.org.key to remote servers] **************************************************************************************************************************
+ok: [freeradius3]
+ok: [freeradius4]
+ok: [freeradius1]
+ok: [freeradius2]
+
+TASK [Copy new radius.domain.org.crt certificate to remote servers] **************************************************************************************************************
+ok: [freeradius1]
+ok: [freeradius2]
+ok: [freeradius3]
+ok: [freeradius4]
+
+TASK [restart freeradius] ********************************************************************************************************************************************************
+changed: [freeradius3]
+changed: [freeradius1]
+changed: [freeradius4]
+changed: [freeradius2]
+
 PLAY RECAP ***********************************************************************************************************************************************************************
-freeradius1                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-freeradius2                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-freeradius3                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-freeradius4                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius1                : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius2                : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius3                : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+freeradius4                : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[ansible@ansible]
 ```
 
 #### Playbook Example 2
