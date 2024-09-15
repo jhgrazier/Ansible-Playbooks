@@ -2,8 +2,8 @@
 # Playbooks for Cisco Products
 a respository of ansible playbooks for various Cisco products
 
-## Cisco CSR1000V
-[CSR1000V Playbooks](https://github.com/jhgrazier/ansible-playbooks/tree/main/cisco/routers/README.md)
+## Cisco Routers
+[Cisco Router Playbooks](https://github.com/jhgrazier/ansible-playbooks/tree/main/cisco/routers/README.md)
 
 ## Cisco Firepower Firewall
 
