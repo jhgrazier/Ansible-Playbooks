@@ -13,7 +13,7 @@ Run the Playbooks
 This specific playbook will pull system/services configuration and display it on the terminal in an XML format.
 
 ```bash
-[ansible@ansible playbooks-with-username-auth]$ ansible-playbook juniper-get-all-interface-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper-get-all-interface-configuration-hierarchies.yaml
 Junos Username: root
 Junos Password:
 
@@ -32,7 +32,7 @@ ok: [juniper1.ignyte.lab] => {
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
-[ansible@ansible playbooks-with-username-auth]$ ansible-playbook juniper-get-interface-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper-get-interface-configuration-hierarchies.yaml
 Junos Username: root
 Junos Password:
 
@@ -76,7 +76,7 @@ juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    s
 This specific playbook will pull system/services configuration and display it on the terminal.
 
 ```bash
-[ansible@ansible playbooks-with-username-auth]$ ansible-playbook juniper-get-system_services-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper-get-system_services-configuration-hierarchies.yaml
 Junos Username: root
 Junos Password:
 
@@ -136,7 +136,7 @@ delete interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members vlan-15
 Run the Playbook
 
 ```bash
-[ansible@ansible playbooks-with-username-auth]$ ansible-playbook juniper-set-interface-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper-set-interface-configuration-hierarchies.yaml
 Junos Username: root
 Junos Password:
 
@@ -163,7 +163,7 @@ juniper1.ignyte.lab        : ok=2    changed=0    unreachable=0    failed=0    s
 This specific playbook will pull all configuration and dump into a file on your ansible server.
 
 ```bash
-[ansible@ansible playbooks-with-username-auth]$ ansible-playbook juniper-get-configuration-hierarchies.yaml
+[ansible@ansible]$ ansible-playbook juniper-get-configuration-hierarchies.yaml
 Junos Username: root
 Junos Password:
 
@@ -235,5 +235,54 @@ system {
             url https://ae1.juniper.net/junos/key_retrieval;
         }
     }
+```
+#### Playbook Example 6
+This specific playbook will upgrade the Juniper code to the release specified and reboot the device to that code. 
+
+##### Notes
+When you execute the software or juniper_junos_software module, it performs the following operations:
+
+Compares the Junos OS version specified in the version argument, or in the software package filename if the version argument is omitted, to the installed version on the managed device. If the installed and desired versions are identical, the module skips the remaining installation steps and sets changed and failed to false.
+
+If the software package is located on the Ansible control node, and the no_copy parameter is omitted or set to False, the module performs the following operations:
+
+Computes the checksum of the local software package or packages using the algorithm specified in the checksum_algorithm argument, if the checksum is not already provided in the checksum argument. Acceptable checksum_algorithm values are md5, sha1, and sha256. The default is md5.
+
+Performs a storage cleanup on the target device to create space for the software package, unless the cleanfs argument is set to false.
+
+SCP or FTP copies any packages to the target device.
+
+When the module includes local_package, the package is copied to the remote_package directory, or if remote_package is not specified, to the /var/tmp directory, if a file with the same name and checksum does not already reside in the target location on the device. When the module includes pkg_set, the packages are always copied to the /var/tmp directory on the Virtual Chassis primary device.
+
+Note:
+
+If the cleanfs argument is omitted or set to true, the module copies the software package to the device even if it already exists in the target location, because the storage cleanup operation removes the existing file. If cleanfs: false is present and the file already resides at the target location, the module skips the file copy operation.
+
+Computes the checksum of each remote file and compares it to the value of the local file.
+
+```bash
+[ansible@ansible]$ ansible-playbook juniper-upgrade-device.yaml
+Junos Username: root
+Junos Password:
+
+PLAY [Perform a Junos OS software upgrade] ***************************************************************************************************************************************
+
+TASK [Upgrade Junos OS] **********************************************************************************************************************************************************
+changed: [juniper1.ignyte.lab]
+
+TASK [Print the response] ********************************************************************************************************************************************************
+ok: [juniper1.ignyte.lab] => {
+    "response": {
+        "changed": true,
+        "check_mode": false,
+        "failed": false,
+        "msg": "Package /srv/ansible/ansible-playbooks/juniper/playbooks-with-username-auth/junos-srxsme-24.2R1.17.tgz successfully installed. Response from device is: \nFormatting alternate root (/dev/da0s1a)...\n/dev/da0s1a: 588.2MB (1204616 sectors) block size 16384, fragment size 2048\n\tusing 4 cylinder groups of 147.06MB, 9412 blks, 18944 inodes.\nsuper-block backups (for fsck -b #) at:\n 32, 301216, 602400, 903584\nsaving package file in /var/sw/pkg ...\nInstalling package '/altroot/cf/packages/install-tmp/junos-24.2R1.17' ...\nVerified junos-boot-srxsme-24.2R1.17.tgz signed by PackageProductionECP256_2024 method ECDSA256+SHA256\nVerified junos-srxsme-24.2R1.17-domestic signed by PackageProductionECP256_2024 method ECDSA256+SHA256\nVerified manifest signed by PackageProductionECP256_2024 method ECDSA256+SHA256\nJUNOS 24.2R1.17 will become active at next reboot\nWARNING: A reboot is required to load this software correctly\nWARNING:     Use the 'request system reboot' command\nWARNING:         when software installation is complete\nSaving state for rollback ...\n Reboot successfully initiated. Reboot message: Shutdown NOW! [pid 72995]"
+    }
+}
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+juniper1.ignyte.lab        : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[ansible@ansible]$
 ```
 
