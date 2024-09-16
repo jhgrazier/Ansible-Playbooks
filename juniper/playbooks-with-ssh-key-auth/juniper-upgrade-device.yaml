@@ -1,0 +1,17 @@
+---
+ - name: Perform a Junos OS software upgrade
+   hosts: juniper
+   connection: local
+   gather_facts: no
+
+   tasks:
+     - name: Upgrade Junos OS
+       juniper.device.software:
+         local_package: "junos-srxsme-24.2R1.17.tgz"
+         no_copy: false
+         validate: True
+       register: response
+
+     - name: Print the response
+       debug:
+         var: response
