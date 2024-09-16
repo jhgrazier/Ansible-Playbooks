@@ -15,4 +15,6 @@ a respository of ansible playbooks for various vendor specific products
 ## Juniper
 [Juniper Playbooks](https://github.com/jhgrazier/ansible-playbooks/tree/main/juniper/README.md)
 
+## Palo Alto
+
 ## Ruckus
