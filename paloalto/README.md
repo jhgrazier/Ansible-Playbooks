@@ -366,7 +366,7 @@ palo-alto1                 : ok=2    changed=0    unreachable=0    failed=0    s
 
 ```
 
-#### Playbook Example 6
+#### Playbook Example 7
 This specific playbook will upgrade the Palo Alto code to the release specified and reboot the device to that code. 
 
 ```bash
