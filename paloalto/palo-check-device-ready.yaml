@@ -1,0 +1,34 @@
+---
+ - name: Gather system info
+   hosts: '{{ target | default("palo_devices") }}'
+   connection: local
+
+   vars_prompt:
+      - name: username
+        prompt: Palo Username
+        private: no
+
+      - name: password
+        prompt: Palo Password
+        private: yes
+
+      - name: api_key
+        prompt: Palo API Key
+        private: yes
+
+   vars:
+     device:
+       ip_address: 192.168.99.15
+       api_key: '{{ api_key }}'
+
+   tasks:
+     - name: Check to see if device is ready
+       paloaltonetworks.panos.panos_op:
+         provider: '{{ device }}'
+         cmd: 'show chassis-ready'
+       changed_when: false
+       register: response
+
+     - name: "Print result"
+       ansible.builtin.debug:
+         var: response 

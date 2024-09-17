@@ -1,0 +1,37 @@
+---
+ - name: Gather Palo Security Rules
+   hosts: '{{ target | default("palo_devices") }}'
+   connection: local
+
+   vars_prompt:
+      - name: username
+        prompt: Palo Username
+        private: no
+
+      - name: password
+        prompt: Palo Password
+        private: yes
+
+      - name: api_key
+        prompt: Palo API Key
+        private: yes
+
+   vars:
+     device:
+       ip_address: 192.168.99.15
+       api_key: '{{ api_key }}'
+
+   collections:
+     - paloaltonetworks.panos
+
+   tasks:
+     - name: Get all security rules
+       paloaltonetworks.panos.panos_security_rule:
+         provider: "{{ device }}"
+         gathered_filter: "*"
+         state: gathered
+       register: sec_rules
+
+     - name: Output
+       ansible.builtin.debug:
+         msg: "{{ sec_rules }}"

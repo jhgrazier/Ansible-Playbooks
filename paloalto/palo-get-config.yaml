@@ -1,0 +1,32 @@
+---
+ - name: Gather Palo Configuration
+   hosts: '{{ target | default("palo_devices") }}'
+   connection: local
+
+   vars_prompt:
+      - name: username
+        prompt: Palo Username
+        private: no
+
+      - name: password
+        prompt: Palo Password
+        private: yes
+
+      - name: api_key
+        prompt: Palo API Key
+        private: yes
+
+   vars:
+     device:
+       ip_address: 192.168.99.15
+       api_key: '{{ api_key }}'
+
+   collections:
+     - paloaltonetworks.panos
+
+   tasks:
+     - name: Export Palo Alto device configuratoin
+       paloaltonetworks.panos.panos_export:
+         provider: '{{ device }}'
+         category: 'configuration'
+         filename: 'running-config.xml'

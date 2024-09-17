@@ -1,0 +1,37 @@
+---
+ - name: Gather system info
+   hosts: '{{ target | default("palo_devices") }}'
+   connection: local
+
+   vars_prompt:
+      - name: username
+        prompt: Palo Username
+        private: no
+
+      - name: password
+        prompt: Palo Password
+        private: yes
+
+      - name: api_key
+        prompt: Palo API Key
+        private: yes
+
+   vars:
+     device:
+       ip_address: 192.168.99.15
+       api_key: '{{ api_key }}'
+
+   vars:
+     device:
+       ip_address: '{{ ip_address }}'
+       api_key: '{{ api_key }}'
+
+   tasks:
+     - name: Download PAN-OS version
+       paloaltonetworks.panos.panos_software:
+         provider: '{{ device }}'
+         version: '{{ version }}'
+         sync_to_peer: '{{ sync_to_peer }}'
+         download: true
+         install: false
+         restart: false
